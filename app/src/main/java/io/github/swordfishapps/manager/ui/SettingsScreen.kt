@@ -58,15 +58,15 @@ fun SettingsScreen(onBack: () -> Unit) {
                     val keys = listOf("auto", "standard", "shizuku", "root")
                     Choices(
                         "Install with",
-                        "Automatic uses Shizuku if it's running, then root if you've allowed it, otherwise Android's installer.",
-                        listOf("Automatic", "Android", "Shizuku", "Root"),
+                        "Automatic uses Shevery or Shizuku if running, then root if you've allowed it, otherwise Android's installer.",
+                        listOf("Automatic", "Android", "Shevery", "Root"),
                         keys.indexOf(s.installMethod).coerceAtLeast(0), sh,
                     ) { i -> store.updateSettings { it.copy(installMethod = keys[i]) } }
                 }
             }
             group("Background updates") {
                 row { sh ->
-                    Toggle("Update automatically", "Check once a day; install silently with Shizuku or root, otherwise notify", s.autoUpdate, sh) { v ->
+                    Toggle("Update automatically", "Check once a day; install silently with Shevery (or Shizuku) or root, otherwise notify", s.autoUpdate, sh) { v ->
                         store.updateSettings { it.copy(autoUpdate = v) }
                     }
                 }
@@ -87,7 +87,8 @@ fun SettingsScreen(onBack: () -> Unit) {
                 row { sh -> Link("Swordfish Manager $version", "github.com/SwordfishApps/manager", sh) { open("https://github.com/SwordfishApps/manager") } }
                 row { sh -> Link("Swordfish", "swordfishapps.github.io: all the apps and their credits", sh) { open("https://swordfishapps.github.io") } }
                 row { sh -> Link("GNU GPL v3 or later", "Free software. Installs only apps signed by Swordfish.", sh) { open("https://www.gnu.org/licenses/gpl-3.0.html") } }
-                row { sh -> Link("Shizuku", "Apache License 2.0, by RikkaApps", sh) { open("https://github.com/RikkaApps/Shizuku-API") } }
+                row { sh -> Link("Shevery", "Recommended for silent updates: a Material 3 fork of Shizuku, Apache License 2.0", sh) { open("https://github.com/HmnDev-Tech/shevery") } }
+                row { sh -> Link("Shizuku API", "Apache License 2.0, by RikkaApps", sh) { open("https://github.com/RikkaApps/Shizuku-API") } }
             }
         }
     }

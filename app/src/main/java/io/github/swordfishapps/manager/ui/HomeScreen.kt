@@ -134,7 +134,7 @@ private fun MethodCard(preferred: String, shizuku: Installer.ShizukuState, key: 
         Column(Modifier.padding(20.dp)) {
             Text(
                 when (method) {
-                    Installer.Method.SHIZUKU -> "Silent updates with Shizuku"
+                    Installer.Method.SHIZUKU -> if (Installer.helperPackage(context) == Installer.SHEVERY_PACKAGE) "Silent updates with Shevery" else "Silent updates with Shizuku"
                     Installer.Method.ROOT -> "Silent updates with root"
                     else -> "Updates ask before installing"
                 },
@@ -143,7 +143,7 @@ private fun MethodCard(preferred: String, shizuku: Installer.ShizukuState, key: 
             Text(
                 when (method) {
                     Installer.Method.SHIZUKU, Installer.Method.ROOT -> "New versions install in the background, checked against Swordfish's signature first."
-                    else -> "Android confirms each install. On Android 12 and later, apps the Manager installed can update without asking. For fully silent updates, use Shizuku or root."
+                    else -> "Android confirms each install. On Android 12 and later, apps the Manager installed can update without asking. For fully silent updates, use Shevery (a Material 3 take on Shizuku) or root."
                 },
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 4.dp),
@@ -151,13 +151,15 @@ private fun MethodCard(preferred: String, shizuku: Installer.ShizukuState, key: 
             if (method == Installer.Method.STANDARD || method == null) {
                 Row(Modifier.padding(top = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     when (shizuku) {
-                        Installer.ShizukuState.NEEDS_PERMISSION -> FilledTonalButton(onClick = { Installer.requestShizuku(); onChanged() }) { Text("Allow Shizuku") }
+                        Installer.ShizukuState.NEEDS_PERMISSION -> FilledTonalButton(onClick = { Installer.requestShizuku(); onChanged() }) {
+                            Text(if (Installer.helperPackage(context) == Installer.SHEVERY_PACKAGE) "Allow Shevery" else "Allow Shizuku")
+                        }
                         Installer.ShizukuState.NOT_RUNNING -> FilledTonalButton(onClick = {
-                            runCatching { context.startActivity(context.packageManager.getLaunchIntentForPackage(Installer.SHIZUKU_PACKAGE)) }
-                        }) { Text("Start Shizuku") }
+                            Installer.helperPackage(context)?.let { pkg -> runCatching { context.startActivity(context.packageManager.getLaunchIntentForPackage(pkg)) } }
+                        }) { Text(if (Installer.helperPackage(context) == Installer.SHEVERY_PACKAGE) "Start Shevery" else "Start Shizuku") }
                         Installer.ShizukuState.NOT_INSTALLED -> FilledTonalButton(onClick = {
-                            runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://shizuku.rikka.app/download/"))) }
-                        }) { Text("Get Shizuku") }
+                            runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Installer.SHEVERY_DOWNLOAD))) }
+                        }) { Text("Get Shevery") }
                         Installer.ShizukuState.READY -> Unit
                     }
                     val scope = rememberCoroutineScope()

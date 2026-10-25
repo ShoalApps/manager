@@ -39,10 +39,18 @@ object Installer {
     internal fun report(pkg: String, outcome: Outcome) { _results.tryEmit(pkg to outcome) }
 
     const val SHIZUKU_PACKAGE = "moe.shizuku.privileged.api"
+    /** Shevery: a Material 3 fork of Shizuku with the same API (github.com/HmnDev-Tech/shevery). Recommended. */
+    const val SHEVERY_PACKAGE = "com.hamondev.shevery"
+    const val SHEVERY_DOWNLOAD = "https://github.com/HmnDev-Tech/shevery/releases/latest"
+
+    /** Whichever of Shevery or Shizuku is installed (Shevery first), to open for starting it. */
+    fun helperPackage(context: Context): String? = listOf(SHEVERY_PACKAGE, SHIZUKU_PACKAGE).firstOrNull { pkg ->
+        runCatching { context.packageManager.getPackageInfo(pkg, 0) }.isSuccess
+    }
     const val SHIZUKU_REQUEST = 7110
 
     fun shizukuState(context: Context): ShizukuState {
-        val installed = runCatching { context.packageManager.getPackageInfo(SHIZUKU_PACKAGE, 0) }.isSuccess
+        val installed = helperPackage(context) != null
         val running = runCatching { Shizuku.pingBinder() }.getOrDefault(false)
         return when {
             running && !Shizuku.isPreV11() && Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED -> ShizukuState.READY

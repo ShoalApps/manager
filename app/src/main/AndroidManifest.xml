@@ -16,6 +16,7 @@
         <package android:name="io.github.swordfishapps.social" />
         <package android:name="io.github.swordfishapps.clips" />
         <package android:name="moe.shizuku.privileged.api" />
+        <package android:name="com.hamondev.shevery" />
     </queries>
 
     <!-- Reading the Tintloom version's data once, after the rename. Signature-only: both apps share the release key. -->

@@ -16,7 +16,10 @@ their GitHub releases, and keeps itself up to date too.
 Every push to `main` builds a signed release. Install `SwordfishManager.apk` from the newest
 [release](https://github.com/SwordfishApps/manager/releases/latest).
 
-## Shizuku
+## Shevery (or Shizuku)
+
+[Shevery](https://github.com/HmnDev-Tech/shevery) is recommended: a Material 3 fork of Shizuku with the same API, so it works the same way. Uninstall Shizuku before installing it (they conflict).
+
 
 [Shizuku](https://shizuku.rikka.app) lets apps use system features without root. Start it (wireless
 debugging on Android 11+, or adb), tap **Allow Shizuku** in the Manager, and updates become silent.
