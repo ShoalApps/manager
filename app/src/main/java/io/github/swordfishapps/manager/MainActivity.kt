@@ -30,10 +30,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settings by Graph.store.settings.collectAsState()
             ManagerTheme(settings) {
-                var inSettings by remember { mutableStateOf(false) }
-                BackHandler(enabled = inSettings) { inSettings = false }
-                if (inSettings) SettingsScreen(onBack = { inSettings = false })
-                else HomeScreen(highlight.value, onSettings = { inSettings = true })
+                var screen by remember { mutableStateOf("home") }
+                BackHandler(enabled = screen != "home") { screen = "home" }
+                when (screen) {
+                    "settings" -> SettingsScreen(onBack = { screen = "home" })
+                    "accounts" -> io.github.swordfishapps.manager.ui.AccountsScreen(onBack = { screen = "home" })
+                    else -> HomeScreen(highlight.value, onSettings = { screen = "settings" }, onAccounts = { screen = "accounts" })
+                }
             }
         }
     }

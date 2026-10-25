@@ -28,6 +28,7 @@ class ManagerApp : Application() {
         super.onCreate()
         DataMover.run(this)
         Graph.app = this
+        io.github.swordfishapps.manager.data.Accounts.init(this)
         getSystemService(NotificationManager::class.java).createNotificationChannel(
             NotificationChannel(UpdateWorker.CHANNEL, "Updates", NotificationManager.IMPORTANCE_DEFAULT).apply {
                 description = "New versions of Swordfish apps"

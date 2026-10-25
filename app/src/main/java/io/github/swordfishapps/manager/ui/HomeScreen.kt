@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Settings
@@ -71,7 +72,7 @@ import io.github.swordfishapps.manager.data.SwordfishApp
 import kotlinx.coroutines.launch
 
 @Composable
-fun HomeScreen(highlight: String?, onSettings: () -> Unit) {
+fun HomeScreen(highlight: String?, onSettings: () -> Unit, onAccounts: () -> Unit = {}) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val settings by Graph.store.settings.collectAsState()
@@ -92,6 +93,7 @@ fun HomeScreen(highlight: String?, onSettings: () -> Unit) {
                 title = { Text("Swordfish Manager", fontWeight = FontWeight.Bold) },
                 actions = {
                     IconButton(onClick = { scope.launch { Graph.check() } }) { Icon(Icons.Rounded.Refresh, "Check for updates") }
+                    IconButton(onClick = onAccounts) { Icon(Icons.Rounded.AccountCircle, "Accounts") }
                     IconButton(onClick = onSettings) { Icon(Icons.Rounded.Settings, "Settings") }
                 },
             )
