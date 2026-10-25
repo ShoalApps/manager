@@ -1,4 +1,4 @@
-package io.github.tintloom.manager
+package io.github.swordfishapps.manager
 
 import android.app.Application
 import android.app.NotificationChannel
@@ -7,12 +7,12 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import io.github.tintloom.manager.data.Catalog
-import io.github.tintloom.manager.data.Installer
-import io.github.tintloom.manager.data.Releases
-import io.github.tintloom.manager.data.Store
-import io.github.tintloom.manager.data.TintloomApp
-import io.github.tintloom.manager.data.UpdateWorker
+import io.github.swordfishapps.manager.data.Catalog
+import io.github.swordfishapps.manager.data.Installer
+import io.github.swordfishapps.manager.data.Releases
+import io.github.swordfishapps.manager.data.Store
+import io.github.swordfishapps.manager.data.SwordfishApp
+import io.github.swordfishapps.manager.data.UpdateWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -26,10 +26,11 @@ import java.util.concurrent.TimeUnit
 class ManagerApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        DataMover.run(this)
         Graph.app = this
         getSystemService(NotificationManager::class.java).createNotificationChannel(
             NotificationChannel(UpdateWorker.CHANNEL, "Updates", NotificationManager.IMPORTANCE_DEFAULT).apply {
-                description = "New versions of Tintloom apps"
+                description = "New versions of Swordfish apps"
             },
         )
         UpdateWorker.schedule(this)
@@ -59,7 +60,7 @@ object Graph {
         OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor { chain -> chain.proceed(chain.request().newBuilder().header("User-Agent", "TintloomManager (Android)").build()) }
+            .addInterceptor { chain -> chain.proceed(chain.request().newBuilder().header("User-Agent", "SwordfishManager (Android)").build()) }
             .build()
     }
     val store by lazy { Store(app) }
@@ -75,8 +76,8 @@ object Graph {
 
     fun methodChanged() { scope.launch { methodVersion++ } }
 
-    private fun state(app: TintloomApp) = states[app.packageName] ?: AppState()
-    private fun set(app: TintloomApp, change: (AppState) -> AppState) { states[app.packageName] = change(state(app)) }
+    private fun state(app: SwordfishApp) = states[app.packageName] ?: AppState()
+    private fun set(app: SwordfishApp, change: (AppState) -> AppState) { states[app.packageName] = change(state(app)) }
 
     /** Re-reads what's installed (cheap; after installs and on resume). */
     fun refreshInstalled() {
@@ -102,9 +103,9 @@ object Graph {
     }
 
     /** Downloads, checks and installs an app's latest release. */
-    suspend fun install(app: TintloomApp) = kotlinx.coroutines.withContext(Dispatchers.IO) { installNow(app) }
+    suspend fun install(app: SwordfishApp) = kotlinx.coroutines.withContext(Dispatchers.IO) { installNow(app) }
 
-    private suspend fun installNow(app: TintloomApp) {
+    private suspend fun installNow(app: SwordfishApp) {
         val release = state(app).latest ?: runCatching { Releases.latest(http, app) }.getOrNull()
         if (release == null) { set(app) { it.copy(message = "Couldn't find a release") }; return }
         set(app) { it.copy(latest = release, progress = 0f, message = null) }

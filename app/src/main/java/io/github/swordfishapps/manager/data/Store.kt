@@ -1,4 +1,4 @@
-package io.github.tintloom.manager.data
+package io.github.swordfishapps.manager.data
 
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "TintloomManager"
+rootProject.name = "SwordfishManager"
 include(":app")

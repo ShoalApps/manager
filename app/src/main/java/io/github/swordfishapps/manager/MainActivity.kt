@@ -1,4 +1,4 @@
-package io.github.tintloom.manager
+package io.github.swordfishapps.manager
 
 import android.Manifest
 import android.content.Intent
@@ -13,9 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.github.tintloom.manager.ui.HomeScreen
-import io.github.tintloom.manager.ui.ManagerTheme
-import io.github.tintloom.manager.ui.SettingsScreen
+import io.github.swordfishapps.manager.ui.HomeScreen
+import io.github.swordfishapps.manager.ui.ManagerTheme
+import io.github.swordfishapps.manager.ui.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     /** The app whose "Check for updates" opened the Manager, if any. */
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SwordfishNotice.show(this)
+        DataMover.offerUninstall(this)
         enableEdgeToEdge()
         highlight.value = callerOf(intent)
         if (Build.VERSION.SDK_INT >= 33) requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
         if (intent?.action == ACTION_CHECK_UPDATES) intent.getStringExtra(EXTRA_PACKAGE)?.removeSuffix(".debug") else null
 
     companion object {
-        const val ACTION_CHECK_UPDATES = "io.github.tintloom.manager.CHECK_UPDATES"
+        const val ACTION_CHECK_UPDATES = "io.github.swordfishapps.manager.CHECK_UPDATES"
         const val EXTRA_PACKAGE = "package"
     }
 }

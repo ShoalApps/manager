@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
-package io.github.tintloom.manager.ui
+package io.github.swordfishapps.manager.ui
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -63,11 +63,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import io.github.tintloom.manager.AppState
-import io.github.tintloom.manager.Graph
-import io.github.tintloom.manager.data.Catalog
-import io.github.tintloom.manager.data.Installer
-import io.github.tintloom.manager.data.TintloomApp
+import io.github.swordfishapps.manager.AppState
+import io.github.swordfishapps.manager.Graph
+import io.github.swordfishapps.manager.data.Catalog
+import io.github.swordfishapps.manager.data.Installer
+import io.github.swordfishapps.manager.data.SwordfishApp
 import kotlinx.coroutines.launch
 
 @Composable
@@ -89,7 +89,7 @@ fun HomeScreen(highlight: String?, onSettings: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Tintloom Manager", fontWeight = FontWeight.Bold) },
+                title = { Text("Swordfish Manager", fontWeight = FontWeight.Bold) },
                 actions = {
                     IconButton(onClick = { scope.launch { Graph.check() } }) { Icon(Icons.Rounded.Refresh, "Check for updates") }
                     IconButton(onClick = onSettings) { Icon(Icons.Rounded.Settings, "Settings") }
@@ -140,7 +140,7 @@ private fun MethodCard(preferred: String, shizuku: Installer.ShizukuState, key: 
             )
             Text(
                 when (method) {
-                    Installer.Method.SHIZUKU, Installer.Method.ROOT -> "New versions install in the background, checked against Tintloom's signature first."
+                    Installer.Method.SHIZUKU, Installer.Method.ROOT -> "New versions install in the background, checked against Swordfish's signature first."
                     else -> "Android confirms each install. On Android 12 and later, apps the Manager installed can update without asking. For fully silent updates, use Shizuku or root."
                 },
                 style = MaterialTheme.typography.bodyMedium,
@@ -177,7 +177,7 @@ private fun MethodCard(preferred: String, shizuku: Installer.ShizukuState, key: 
 }
 
 @Composable
-private fun AppCard(app: TintloomApp, state: AppState, highlighted: Boolean) {
+private fun AppCard(app: SwordfishApp, state: AppState, highlighted: Boolean) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val icon: Drawable? = remember(state.installed) { runCatching { context.packageManager.getApplicationIcon(app.packageName) }.getOrNull() }
@@ -194,7 +194,7 @@ private fun AppCard(app: TintloomApp, state: AppState, highlighted: Boolean) {
                     Image(icon.toBitmap(144, 144).asImageBitmap(), null, Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)))
                 } else {
                     Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
-                        Text(app.name.removePrefix("Tintloom ").take(1), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(app.name.removePrefix("Swordfish ").take(1), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
                 Column(Modifier.padding(start = 16.dp).weight(1f)) {

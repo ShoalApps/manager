@@ -1,4 +1,4 @@
-package io.github.tintloom.manager.data
+package io.github.swordfishapps.manager.data
 
 import android.Manifest
 import android.app.PendingIntent
@@ -15,13 +15,13 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import io.github.tintloom.manager.Graph
-import io.github.tintloom.manager.MainActivity
-import io.github.tintloom.manager.R
+import io.github.swordfishapps.manager.Graph
+import io.github.swordfishapps.manager.MainActivity
+import io.github.swordfishapps.manager.R
 import java.util.concurrent.TimeUnit
 
 /**
- * Once a day: checks every installed Tintloom app for a newer release. With Shizuku or root it
+ * Once a day: checks every installed Swordfish app for a newer release. With Shizuku or root it
  * installs them silently; otherwise it posts a notification to install with a tap.
  */
 class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
@@ -38,7 +38,7 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
             notify(if (failed.isEmpty()) "Updated ${pending.joinToString { it.name }}" else "Couldn't update ${failed.joinToString { it.name }}", if (failed.isEmpty()) null else "Tap to try again")
         } else {
             notify(
-                if (pending.size == 1) "${pending[0].name} has an update" else "${pending.size} Tintloom updates",
+                if (pending.size == 1) "${pending[0].name} has an update" else "${pending.size} Swordfish updates",
                 "Tap to install. With Shizuku or root, the Manager can do this for you.",
             )
         }

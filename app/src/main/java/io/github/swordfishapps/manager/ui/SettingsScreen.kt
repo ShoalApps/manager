@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
-package io.github.tintloom.manager.ui
+package io.github.swordfishapps.manager.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -40,8 +40,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import io.github.tintloom.manager.Graph
-import io.github.tintloom.manager.data.UpdateWorker
+import io.github.swordfishapps.manager.Graph
+import io.github.swordfishapps.manager.data.UpdateWorker
 
 @Composable
 fun SettingsScreen(onBack: () -> Unit) {
@@ -84,9 +84,9 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
             group("About") {
-                row { sh -> Link("Tintloom Manager $version", "github.com/Tintloom/manager", sh) { open("https://github.com/Tintloom/manager") } }
-                row { sh -> Link("Tintloom", "tintloom.github.io: all the apps and their credits", sh) { open("https://tintloom.github.io") } }
-                row { sh -> Link("GNU GPL v3 or later", "Free software. Installs only apps signed by Tintloom.", sh) { open("https://www.gnu.org/licenses/gpl-3.0.html") } }
+                row { sh -> Link("Swordfish Manager $version", "github.com/SwordfishApps/manager", sh) { open("https://github.com/SwordfishApps/manager") } }
+                row { sh -> Link("Swordfish", "swordfishapps.github.io: all the apps and their credits", sh) { open("https://swordfishapps.github.io") } }
+                row { sh -> Link("GNU GPL v3 or later", "Free software. Installs only apps signed by Swordfish.", sh) { open("https://www.gnu.org/licenses/gpl-3.0.html") } }
                 row { sh -> Link("Shizuku", "Apache License 2.0, by RikkaApps", sh) { open("https://github.com/RikkaApps/Shizuku-API") } }
             }
         }
