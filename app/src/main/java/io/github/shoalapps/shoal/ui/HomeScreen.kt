@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
-package io.github.swordfishapps.manager.ui
+package io.github.shoalapps.shoal.ui
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -64,11 +64,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
-import io.github.swordfishapps.manager.AppState
-import io.github.swordfishapps.manager.Graph
-import io.github.swordfishapps.manager.data.Catalog
-import io.github.swordfishapps.manager.data.Installer
-import io.github.swordfishapps.manager.data.SwordfishApp
+import io.github.shoalapps.shoal.AppState
+import io.github.shoalapps.shoal.Graph
+import io.github.shoalapps.shoal.data.Catalog
+import io.github.shoalapps.shoal.data.Installer
+import io.github.shoalapps.shoal.data.ShoalApp
 import kotlinx.coroutines.launch
 
 @Composable
@@ -90,7 +90,7 @@ fun HomeScreen(highlight: String?, onSettings: () -> Unit, onAccounts: () -> Uni
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Swordfish Manager", fontWeight = FontWeight.Bold) },
+                title = { Text("Shoal", fontWeight = FontWeight.Bold) },
                 actions = {
                     IconButton(onClick = { scope.launch { Graph.check() } }) { Icon(Icons.Rounded.Refresh, "Check for updates") }
                     IconButton(onClick = onAccounts) { Icon(Icons.Rounded.AccountCircle, "Accounts") }
@@ -142,7 +142,7 @@ private fun MethodCard(preferred: String, shizuku: Installer.ShizukuState, key: 
             )
             Text(
                 when (method) {
-                    Installer.Method.SHIZUKU, Installer.Method.ROOT -> "New versions install in the background, checked against Swordfish's signature first."
+                    Installer.Method.SHIZUKU, Installer.Method.ROOT -> "New versions install in the background, checked against Shoal's signature first."
                     else -> "Android confirms each install. On Android 12 and later, apps the Manager installed can update without asking. For fully silent updates, use Shevery (a Material 3 take on Shizuku) or root."
                 },
                 style = MaterialTheme.typography.bodyMedium,
@@ -181,7 +181,7 @@ private fun MethodCard(preferred: String, shizuku: Installer.ShizukuState, key: 
 }
 
 @Composable
-private fun AppCard(app: SwordfishApp, state: AppState, highlighted: Boolean) {
+private fun AppCard(app: ShoalApp, state: AppState, highlighted: Boolean) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val icon: Drawable? = remember(state.installed) { runCatching { context.packageManager.getApplicationIcon(app.packageName) }.getOrNull() }
@@ -198,7 +198,7 @@ private fun AppCard(app: SwordfishApp, state: AppState, highlighted: Boolean) {
                     Image(icon.toBitmap(144, 144).asImageBitmap(), null, Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)))
                 } else {
                     Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
-                        Text(app.name.removePrefix("Swordfish ").take(1), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(app.name.removePrefix("Shoal ").take(1), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                 }
                 Column(Modifier.padding(start = 16.dp).weight(1f)) {

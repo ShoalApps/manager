@@ -1,14 +1,14 @@
-package io.github.swordfishapps.manager
+package io.github.shoalapps.shoal
 
-import io.github.swordfishapps.manager.data.Catalog
-import io.github.swordfishapps.manager.data.Releases
+import io.github.shoalapps.shoal.data.Catalog
+import io.github.shoalapps.shoal.data.Releases
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
 class ReleasesTest {
     @Test fun buildNumbersComeFromReleaseTags() {
-        assertEquals(42, Releases.buildOf("https://github.com/SwordfishApps/video/releases/tag/build-42"))
+        assertEquals(42, Releases.buildOf("https://github.com/ShoalApps/anglerfish/releases/tag/build-42"))
         assertEquals(7, Releases.buildOf("build-7"))
         assertNull(Releases.buildOf("v1.0"))
     }
@@ -20,6 +20,6 @@ class ReleasesTest {
 
     @Test fun everyAppHasItsOwnRepoAndApk() {
         assertEquals(Catalog.apps.size, Catalog.apps.map { it.packageName }.toSet().size)
-        Catalog.apps.forEach { assert(it.asset.endsWith(".apk") && it.repo.startsWith("SwordfishApps/")) }
+        Catalog.apps.forEach { assert(it.asset.endsWith(".apk") && it.repo.startsWith("ShoalApps/")) }
     }
 }

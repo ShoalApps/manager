@@ -1,4 +1,4 @@
-package io.github.swordfishapps.manager.data
+package io.github.shoalapps.shoal.data
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -8,7 +8,7 @@ import android.net.Uri
 import org.json.JSONObject
 
 /**
- * Hands your accounts to the Swordfish apps: content://<manager>.accounts/all returns one row of
+ * Hands your accounts to the Shoal apps: content://<manager>.accounts/all returns one row of
  * JSON. Protected by a signature permission, so only apps signed with the same key can read it.
  */
 class AccountsProvider : ContentProvider() {

@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SwordfishManager"
+rootProject.name = "ShoalManager"
 include(":app")

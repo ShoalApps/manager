@@ -1,4 +1,4 @@
-package io.github.swordfishapps.manager.data
+package io.github.shoalapps.shoal.data
 
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import rikka.shizuku.Shizuku
 import java.io.File
-import io.github.swordfishapps.manager.Graph
+import io.github.shoalapps.shoal.Graph
 import java.util.concurrent.TimeUnit
 
 /**
@@ -90,7 +90,7 @@ object Installer {
         }
     }
 
-    suspend fun install(context: Context, apk: File, app: SwordfishApp, method: Method): Outcome = when (method) {
+    suspend fun install(context: Context, apk: File, app: ShoalApp, method: Method): Outcome = when (method) {
         Method.STANDARD -> standard(context, apk, app)
         Method.SHIZUKU -> withContext(Dispatchers.IO) { viaPm(shizukuProcess(pmInstall(context, apk)), apk) }
         Method.ROOT -> withContext(Dispatchers.IO) { viaPm(ProcessBuilder("su", "-c", pmInstall(context, apk).joinToString(" ")).start(), apk) }
@@ -113,7 +113,7 @@ object Installer {
         return m.invoke(null, cmd, null, null) as Process
     }
 
-    private fun standard(context: Context, apk: File, app: SwordfishApp): Outcome {
+    private fun standard(context: Context, apk: File, app: ShoalApp): Outcome {
         val installer = context.packageManager.packageInstaller
         val params = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
             setAppPackageName(app.packageName)

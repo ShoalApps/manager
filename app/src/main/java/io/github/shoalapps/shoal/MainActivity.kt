@@ -1,4 +1,4 @@
-package io.github.swordfishapps.manager
+package io.github.shoalapps.shoal
 
 import android.Manifest
 import android.content.Intent
@@ -13,9 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import io.github.swordfishapps.manager.ui.HomeScreen
-import io.github.swordfishapps.manager.ui.ManagerTheme
-import io.github.swordfishapps.manager.ui.SettingsScreen
+import io.github.shoalapps.shoal.ui.HomeScreen
+import io.github.shoalapps.shoal.ui.ManagerTheme
+import io.github.shoalapps.shoal.ui.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     /** The app whose "Check for updates" opened the Manager, if any. */
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 BackHandler(enabled = screen != "home") { screen = "home" }
                 when (screen) {
                     "settings" -> SettingsScreen(onBack = { screen = "home" })
-                    "accounts" -> io.github.swordfishapps.manager.ui.AccountsScreen(onBack = { screen = "home" })
+                    "accounts" -> io.github.shoalapps.shoal.ui.AccountsScreen(onBack = { screen = "home" })
                     else -> HomeScreen(highlight.value, onSettings = { screen = "settings" }, onAccounts = { screen = "accounts" })
                 }
             }
@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
         if (intent?.action == ACTION_CHECK_UPDATES) intent.getStringExtra(EXTRA_PACKAGE)?.removeSuffix(".debug") else null
 
     companion object {
-        const val ACTION_CHECK_UPDATES = "io.github.swordfishapps.manager.CHECK_UPDATES"
+        const val ACTION_CHECK_UPDATES = "io.github.shoalapps.shoal.CHECK_UPDATES"
         const val EXTRA_PACKAGE = "package"
     }
 }

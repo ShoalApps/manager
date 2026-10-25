@@ -1,4 +1,4 @@
-package io.github.swordfishapps.manager
+package io.github.shoalapps.shoal
 
 import android.app.Application
 import android.app.NotificationChannel
@@ -7,12 +7,12 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import io.github.swordfishapps.manager.data.Catalog
-import io.github.swordfishapps.manager.data.Installer
-import io.github.swordfishapps.manager.data.Releases
-import io.github.swordfishapps.manager.data.Store
-import io.github.swordfishapps.manager.data.SwordfishApp
-import io.github.swordfishapps.manager.data.UpdateWorker
+import io.github.shoalapps.shoal.data.Catalog
+import io.github.shoalapps.shoal.data.Installer
+import io.github.shoalapps.shoal.data.Releases
+import io.github.shoalapps.shoal.data.Store
+import io.github.shoalapps.shoal.data.ShoalApp
+import io.github.shoalapps.shoal.data.UpdateWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -28,10 +28,10 @@ class ManagerApp : Application() {
         super.onCreate()
         DataMover.run(this)
         Graph.app = this
-        io.github.swordfishapps.manager.data.Accounts.init(this)
+        io.github.shoalapps.shoal.data.Accounts.init(this)
         getSystemService(NotificationManager::class.java).createNotificationChannel(
             NotificationChannel(UpdateWorker.CHANNEL, "Updates", NotificationManager.IMPORTANCE_DEFAULT).apply {
-                description = "New versions of Swordfish apps"
+                description = "New versions of Shoal apps"
             },
         )
         UpdateWorker.schedule(this)
@@ -61,7 +61,7 @@ object Graph {
         OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
-            .addInterceptor { chain -> chain.proceed(chain.request().newBuilder().header("User-Agent", "SwordfishManager (Android)").build()) }
+            .addInterceptor { chain -> chain.proceed(chain.request().newBuilder().header("User-Agent", "ShoalManager (Android)").build()) }
             .build()
     }
     val store by lazy { Store(app) }
@@ -77,8 +77,8 @@ object Graph {
 
     fun methodChanged() { scope.launch { methodVersion++ } }
 
-    private fun state(app: SwordfishApp) = states[app.packageName] ?: AppState()
-    private fun set(app: SwordfishApp, change: (AppState) -> AppState) { states[app.packageName] = change(state(app)) }
+    private fun state(app: ShoalApp) = states[app.packageName] ?: AppState()
+    private fun set(app: ShoalApp, change: (AppState) -> AppState) { states[app.packageName] = change(state(app)) }
 
     /** Re-reads what's installed (cheap; after installs and on resume). */
     fun refreshInstalled() {
@@ -104,9 +104,9 @@ object Graph {
     }
 
     /** Downloads, checks and installs an app's latest release. */
-    suspend fun install(app: SwordfishApp) = kotlinx.coroutines.withContext(Dispatchers.IO) { installNow(app) }
+    suspend fun install(app: ShoalApp) = kotlinx.coroutines.withContext(Dispatchers.IO) { installNow(app) }
 
-    private suspend fun installNow(app: SwordfishApp) {
+    private suspend fun installNow(app: ShoalApp) {
         val release = state(app).latest ?: runCatching { Releases.latest(http, app) }.getOrNull()
         if (release == null) { set(app) { it.copy(message = "Couldn't find a release") }; return }
         set(app) { it.copy(latest = release, progress = 0f, message = null) }

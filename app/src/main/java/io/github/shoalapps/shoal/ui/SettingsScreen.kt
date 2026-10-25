@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
-package io.github.swordfishapps.manager.ui
+package io.github.shoalapps.shoal.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -40,8 +40,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import io.github.swordfishapps.manager.Graph
-import io.github.swordfishapps.manager.data.UpdateWorker
+import io.github.shoalapps.shoal.Graph
+import io.github.shoalapps.shoal.data.UpdateWorker
 
 @Composable
 fun SettingsScreen(onBack: () -> Unit) {
@@ -84,9 +84,9 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
             group("About") {
-                row { sh -> Link("Swordfish Manager $version", "github.com/SwordfishApps/manager", sh) { open("https://github.com/SwordfishApps/manager") } }
-                row { sh -> Link("Swordfish", "swordfishapps.github.io: all the apps and their credits", sh) { open("https://swordfishapps.github.io") } }
-                row { sh -> Link("GNU GPL v3 or later", "Free software. Installs only apps signed by Swordfish.", sh) { open("https://www.gnu.org/licenses/gpl-3.0.html") } }
+                row { sh -> Link("Shoal $version", "github.com/ShoalApps/shoal", sh) { open("https://github.com/ShoalApps/shoal") } }
+                row { sh -> Link("Shoal", "shoalapps.github.io: all the apps and their credits", sh) { open("https://shoalapps.github.io") } }
+                row { sh -> Link("GNU GPL v3 or later", "Free software. Installs only apps signed by Shoal.", sh) { open("https://www.gnu.org/licenses/gpl-3.0.html") } }
                 row { sh -> Link("Shevery", "Recommended for silent updates: a Material 3 fork of Shizuku, Apache License 2.0", sh) { open("https://github.com/HmnDev-Tech/shevery") } }
                 row { sh -> Link("Shizuku API", "Apache License 2.0, by RikkaApps", sh) { open("https://github.com/RikkaApps/Shizuku-API") } }
             }

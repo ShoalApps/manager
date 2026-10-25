@@ -1,20 +1,20 @@
-package io.github.swordfishapps.manager
+package io.github.shoalapps.shoal
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import io.github.swordfishapps.manager.data.Catalog
-import io.github.swordfishapps.manager.data.Releases
+import io.github.shoalapps.shoal.data.Catalog
+import io.github.shoalapps.shoal.data.Releases
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.File
 
-/** The Manager must refuse anything that isn't the right app signed with the Swordfish key. */
+/** The Manager must refuse anything that isn't the right app signed with the Shoal key. */
 @RunWith(AndroidJUnit4::class)
 class VerifyTest {
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-    // This test build is signed with a development key, not Swordfish's.
+    // This test build is signed with a development key, not Shoal's.
     private val debugApk = File(context.packageCodePath)
 
     @Test fun aDifferentAppIsRefused() {
@@ -24,7 +24,7 @@ class VerifyTest {
 
     @Test fun theRightAppWithTheWrongKeyIsRefused() {
         val sameName = Catalog.manager.copy(packageName = context.packageName)
-        assertEquals("The download isn't signed by Swordfish, so it wasn't installed", Releases.verify(context, debugApk, sameName))
+        assertEquals("The download isn't signed by Shoal, so it wasn't installed", Releases.verify(context, debugApk, sameName))
     }
 
     @Test fun somethingThatIsntAnAppIsRefused() {

@@ -3,27 +3,28 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- Installing Swordfish apps from their GitHub releases. Without Shizuku or root, Android asks first. -->
+    <!-- Installing Shoal apps from their GitHub releases. Without Shizuku or root, Android asks first. -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <!-- Lets an update install without asking on Android 12+, once the Manager installed that app. -->
     <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Only the Swordfish apps (and Shizuku) need to be visible to the Manager. -->
+    <!-- Only the Shoal apps (and Shizuku) need to be visible to the Manager. -->
     <queries>
-        <package android:name="io.github.swordfishapps.video" />
-        <package android:name="io.github.swordfishapps.social" />
-        <package android:name="io.github.swordfishapps.clips" />
+        <package android:name="io.github.shoalapps.anglerfish" />
+        <package android:name="io.github.shoalapps.blobfish" />
+        <package android:name="io.github.shoalapps.clownfish" />
+        <package android:name="io.github.shoalapps.swordfish" />
         <package android:name="moe.shizuku.privileged.api" />
         <package android:name="com.hamondev.shevery" />
     </queries>
 
     <!-- Reading the Tintloom version's data once, after the rename. Signature-only: both apps share the release key. -->
     <permission
-        android:name="io.github.swordfishapps.permission.MOVE_DATA"
+        android:name="io.github.shoalapps.permission.MOVE_DATA"
         android:protectionLevel="signature" />
-    <uses-permission android:name="io.github.swordfishapps.permission.MOVE_DATA" />
+    <uses-permission android:name="io.github.shoalapps.permission.MOVE_DATA" />
     <queries>
         <provider android:authorities="io.github.tintloom.manager.movedata" />
         <provider android:authorities="io.github.tintloom.manager.debug.movedata" />
@@ -32,7 +33,7 @@
 
     <!-- Your accounts, shared only with apps signed with the same key. -->
     <permission
-        android:name="io.github.swordfishapps.permission.ACCOUNTS"
+        android:name="io.github.shoalapps.permission.ACCOUNTS"
         android:protectionLevel="signature" />
 
     <application
@@ -54,9 +55,9 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- The other Swordfish apps' "Check for updates" opens this, naming themselves. -->
+            <!-- The other Shoal apps' "Check for updates" opens this, naming themselves. -->
             <intent-filter>
-                <action android:name="io.github.swordfishapps.manager.CHECK_UPDATES" />
+                <action android:name="io.github.shoalapps.shoal.CHECK_UPDATES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -76,6 +77,6 @@
             android:name=".data.AccountsProvider"
             android:authorities="${applicationId}.accounts"
             android:exported="true"
-            android:permission="io.github.swordfishapps.permission.ACCOUNTS" />
+            android:permission="io.github.shoalapps.permission.ACCOUNTS" />
     </application>
 </manifest>

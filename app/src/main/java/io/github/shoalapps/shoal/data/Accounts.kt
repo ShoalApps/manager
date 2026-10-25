@@ -1,4 +1,4 @@
-package io.github.swordfishapps.manager.data
+package io.github.shoalapps.shoal.data
 
 import android.content.Context
 import android.webkit.CookieManager
@@ -22,7 +22,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.security.MessageDigest
 
 /**
- * One place to sign in to everything. The Swordfish apps read these through [AccountsProvider]
+ * One place to sign in to everything. The Shoal apps read these through [AccountsProvider]
  * (signature-protected, so only apps signed with the same key can).
  *
  * - YouTube, TikTok, Instagram and X are website sign-ins, kept as their cookies.
@@ -134,7 +134,7 @@ object Accounts {
         channelsIn(root)
     }
 
-    /** Accounts in an accounts_list answer; the same reading Swordfish Video uses. */
+    /** Accounts in an accounts_list answer; the same reading Anglerfish uses. */
     fun channelsIn(root: JsonElement): List<Channel> {
         val out = mutableListOf<Channel>()
         fun walk(el: JsonElement?) {

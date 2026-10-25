@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 
-package io.github.swordfishapps.manager.ui
+package io.github.shoalapps.shoal.ui
 
 import android.annotation.SuppressLint
 import android.webkit.CookieManager
@@ -57,11 +57,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import io.github.swordfishapps.manager.Graph
-import io.github.swordfishapps.manager.data.Accounts
+import io.github.shoalapps.shoal.Graph
+import io.github.shoalapps.shoal.data.Accounts
 import kotlinx.coroutines.launch
 
-/** Sign in to every service once; the Swordfish apps use these accounts. */
+/** Sign in to every service once; the Shoal apps use these accounts. */
 @Composable
 fun AccountsScreen(onBack: () -> Unit) {
     val context = LocalContext.current
@@ -91,7 +91,7 @@ fun AccountsScreen(onBack: () -> Unit) {
         ) {
             item {
                 Text(
-                    "Sign in here once and Swordfish Video, Social and Clips use these accounts. They stay on this phone and are only shared with apps signed by Swordfish.",
+                    "Sign in here once and Anglerfish, Social and Clips use these accounts. They stay on this phone and are only shared with apps signed by Shoal.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
