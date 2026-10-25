@@ -11,7 +11,7 @@ import org.json.JSONObject
 import java.io.File
 
 /**
- * Hands this app's settings, history and sign-ins to its Swordfish replacement, which has a new
+ * Hands this app's settings, history and sign-ins to its Shoal replacement, which has a new
  * package name and so can't read them itself. Only apps signed with the same release key may ask
  * (a signature permission), so nothing else on the phone can read this.
  */
@@ -57,17 +57,17 @@ class LegacyExport : ContentProvider() {
     override fun update(uri: Uri, values: ContentValues?, selection: String?, args: Array<out String>?) = 0
 }
 
-/** Shown once: the app now lives on as Swordfish Manager, which brings your data across. */
-object SwordfishNotice {
+/** Shown once: the app now lives on as Shoal, which brings your data across. */
+object ShoalNotice {
     fun show(activity: android.app.Activity) {
-        val prefs = activity.getSharedPreferences("swordfish_notice", 0)
+        val prefs = activity.getSharedPreferences("shoal_notice", 0)
         if (prefs.getBoolean("shown", false) || activity.packageName.endsWith(".debug")) return
         prefs.edit().putBoolean("shown", true).apply()
         android.app.AlertDialog.Builder(activity, android.R.style.Theme_DeviceDefault_Dialog_Alert)
-            .setTitle("Tintloom is now Swordfish")
-            .setMessage("This app has a new name and lives on as Swordfish Manager. Install it and your settings, history and sign-ins come with you. This version won't get updates any more.")
-            .setPositiveButton("Get Swordfish Manager") { _, _ ->
-                runCatching { activity.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/SwordfishApps/manager/releases/latest/download/SwordfishManager.apk"))) }
+            .setTitle("Tintloom is now Shoal")
+            .setMessage("This app has a new name and lives on as Shoal. Install it and your settings, history and sign-ins come with you. This version won't get updates any more.")
+            .setPositiveButton("Get Shoal") { _, _ ->
+                runCatching { activity.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/ShoalApps/shoal/releases/latest/download/Shoal.apk"))) }
             }
             .setNegativeButton("Later", null)
             .show()
