@@ -91,7 +91,7 @@ fun AccountsScreen(onBack: () -> Unit) {
         ) {
             item {
                 Text(
-                    "Sign in here once and Swordfish, Social and Clips use these accounts. They stay on this phone and are only shared with apps signed by Shoal.",
+                    "Sign in here once and every Shoal app uses these accounts. They stay on this phone and are only shared with apps signed by Shoal.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -99,7 +99,7 @@ fun AccountsScreen(onBack: () -> Unit) {
             item {
                 ServiceCard(
                     "YouTube",
-                    if (Accounts.signedIn(Accounts.Service.YOUTUBE)) "Signed in" + (saved.youtubeChannelName?.let { " · as $it" } ?: "") else "Video and Clips: your feed, subscriptions and likes",
+                    if (Accounts.signedIn(Accounts.Service.YOUTUBE)) "Signed in" + (saved.youtubeChannelName?.let { " · as $it" } ?: "") else "Swordfish, Clownfish and Pufferfish: your feed, subscriptions and likes",
                     Accounts.signedIn(Accounts.Service.YOUTUBE),
                     onSignIn = { signingIn = Accounts.Service.YOUTUBE },
                     onSignOut = { Accounts.signOut(Accounts.Service.YOUTUBE) },
@@ -109,16 +109,24 @@ fun AccountsScreen(onBack: () -> Unit) {
             item {
                 ServiceCard(
                     "Bluesky",
-                    saved.blueskyHandle?.let { "Signed in as @$it" } ?: "Social: post, reply, like and your timeline",
+                    saved.blueskyHandle?.let { "Signed in as @$it" } ?: "Blobfish: signs in on Bluesky's own page",
                     saved.blueskyHandle != null,
-                    onSignIn = { bluesky = true },
+                    onSignIn = {
+                        // Bluesky sessions can't be shared between apps, so sign in where it's used:
+                        // Blobfish's sign-in on Bluesky's own page. Without Blobfish, an app password here.
+                        val blob = listOf("io.github.shoalapps.blobfish", "io.github.shoalapps.blobfish.debug")
+                            .firstOrNull { runCatching { context.packageManager.getPackageInfo(it, 0) }.isSuccess }
+                        if (blob != null) runCatching {
+                            context.startActivity(android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("blobfish://signin")).setPackage(blob).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK))
+                        }.onFailure { bluesky = true } else bluesky = true
+                    },
                     onSignOut = { Accounts.setBluesky(null, null) },
                 )
             }
             items(listOf(Accounts.Service.TIKTOK, Accounts.Service.INSTAGRAM, Accounts.Service.X)) { s ->
                 ServiceCard(
                     s.title,
-                    if (Accounts.signedIn(s)) "Signed in" else when (s) { Accounts.Service.X -> "Social's X tab"; else -> "Clips' ${s.title} tab" },
+                    if (Accounts.signedIn(s)) "Signed in" else when (s) { Accounts.Service.X -> "Blobfish's X tab"; else -> "Clownfish's ${s.title} tab" },
                     Accounts.signedIn(s),
                     onSignIn = { signingIn = s },
                     onSignOut = { Accounts.signOut(s) },
