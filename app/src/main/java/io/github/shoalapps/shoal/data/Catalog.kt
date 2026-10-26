@@ -13,7 +13,7 @@ object Catalog {
     val video = ShoalApp("Swordfish", "io.github.shoalapps.swordfish", "ShoalApps/swordfish", "Swordfish.apk", "Watch YouTube videos with SponsorBlock, DeArrow and a TV mode")
     val social = ShoalApp("Blobfish", "io.github.shoalapps.blobfish", "ShoalApps/blobfish", "Blobfish.apk", "Bluesky (and X) laid out like Bluesky, with rich formatting")
     val clips = ShoalApp("Clownfish", "io.github.shoalapps.clownfish", "ShoalApps/clownfish", "Clownfish.apk", "Shorts, TikTok and Reels in one place")
-    val music = ShoalApp("Pufferfish", "io.github.shoalapps.pufferfish", "ShoalApps/pufferfish", "Pufferfish.apk", "YouTube Music with background play and synced lyrics")
+    val music = ShoalApp("Pufferfish", "io.github.shoalapps.pufferfish", "ShoalApps/pufferfish", "Pufferfish.apk", "YouTube Music laid out like Spotify, with offline downloads and lyrics")
     val reddit = ShoalApp("Anglerfish", "io.github.shoalapps.anglerfish", "ShoalApps/anglerfish", "Anglerfish.apk", "Reddit as an app: Material tabs, without the get-the-app nags")
     val manager = ShoalApp("Shoal", "io.github.shoalapps.shoal", "ShoalApps/shoal", "Shoal.apk", "Installs and updates the Shoal apps")
 
