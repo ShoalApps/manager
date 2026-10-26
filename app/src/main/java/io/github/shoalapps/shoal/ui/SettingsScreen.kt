@@ -53,6 +53,7 @@ fun SettingsScreen(onBack: () -> Unit) {
 
     Scaffold(topBar = { TopAppBar(title = { Text("Settings") }, navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, "Back") } }) }) { pad ->
         LazyColumn(Modifier.fillMaxSize().padding(top = pad.calculateTopPadding()).wrapContentWidth().widthIn(max = 720.dp), contentPadding = PaddingValues(bottom = 96.dp)) {
+            item(key = "support") { SupportCard { open("https://liberapay.com/ShoalApps") } }
             group("Installing") {
                 row { sh ->
                     val keys = listOf("auto", "standard", "shizuku", "root")
@@ -87,7 +88,6 @@ fun SettingsScreen(onBack: () -> Unit) {
                 if (io.github.shoalapps.shoal.Telemetry.available) row { sh -> Toggle("Send error reports", "Anonymous crash and error reports help fix bugs. Never your accounts or history.", io.github.shoalapps.shoal.Telemetry.enabled, sh) { v -> io.github.shoalapps.shoal.Telemetry.setEnabled(context, v) } }
                 row { sh -> Link("Privacy policy", "What Shoal sends, and to whom", sh) { open("https://shoalapps.github.io/privacy.html") } }
                 row { sh -> Link("Legal", "Licences, trademarks and notices", sh) { open("https://shoalapps.github.io/legal.html") } }
-                row { sh -> Link("Support Shoal", "Shoal is free and has no ads; donations on Liberapay keep it going", sh) { open("https://liberapay.com/ShoalApps") } }
                 row { sh -> Link("Shoal $version", "github.com/ShoalApps/shoal", sh) { open("https://github.com/ShoalApps/shoal") } }
                 row { sh -> Link("Shoal", "shoalapps.github.io: all the apps and their credits", sh) { open("https://shoalapps.github.io") } }
                 row { sh -> Link("GNU GPL v3 or later", "Free software. Installs only apps signed by Shoal.", sh) { open("https://www.gnu.org/licenses/gpl-3.0.html") } }

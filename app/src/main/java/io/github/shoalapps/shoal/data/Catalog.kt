@@ -17,7 +17,8 @@ object Catalog {
     val reddit = ShoalApp("Anglerfish", "io.github.shoalapps.anglerfish", "ShoalApps/anglerfish", "Anglerfish.apk", "Reddit as an app: Material tabs, without the get-the-app nags")
     val manager = ShoalApp("Shoal", "io.github.shoalapps.shoal", "ShoalApps/shoal", "Shoal.apk", "Installs and updates the Shoal apps")
 
-    val apps = listOf(video, social, clips, music, reddit, manager)
+    // Anglerfish (Reddit) is held back for now: Reddit blocks too much of it to be ready.
+    val apps = listOf(video, social, clips, music, manager)
 
     fun of(packageName: String) = apps.firstOrNull { it.packageName == packageName }
 
