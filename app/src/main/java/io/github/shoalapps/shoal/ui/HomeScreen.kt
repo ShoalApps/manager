@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -197,8 +198,12 @@ private fun AppCard(app: ShoalApp, state: AppState, highlighted: Boolean) {
                 if (icon != null) {
                     Image(icon.toBitmap(144, 144).asImageBitmap(), null, Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)))
                 } else {
-                    Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.primaryContainer), contentAlignment = Alignment.Center) {
-                        Text(app.name.removePrefix("Shoal ").take(1), style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Box(Modifier.size(52.dp).clip(RoundedCornerShape(16.dp)), contentAlignment = Alignment.Center) {
+                        // Each app's fish, in its own colours.
+                        androidx.compose.foundation.Image(
+                            androidx.compose.ui.res.painterResource(fishIcon(app.repo)), null,
+                            Modifier.requiredSize(76.dp),
+                        )
                     }
                 }
                 Column(Modifier.padding(start = 16.dp).weight(1f)) {
@@ -263,4 +268,14 @@ private fun versionLine(s: AppState): String = when {
     s.updateAvailable -> "Build ${s.installed} installed · build ${s.latest!!.build} available"
     s.latest != null -> "Build ${s.installed} · up to date"
     else -> "Build ${s.installed}"
+}
+
+/** The fish drawn for an app, by its repository name. */
+private fun fishIcon(repo: String): Int = when (repo.substringAfter('/')) {
+    "swordfish" -> io.github.shoalapps.shoal.R.drawable.fish_swordfish
+    "blobfish" -> io.github.shoalapps.shoal.R.drawable.fish_blobfish
+    "clownfish" -> io.github.shoalapps.shoal.R.drawable.fish_clownfish
+    "pufferfish" -> io.github.shoalapps.shoal.R.drawable.fish_pufferfish
+    "anglerfish" -> io.github.shoalapps.shoal.R.drawable.fish_anglerfish
+    else -> io.github.shoalapps.shoal.R.drawable.fish_shoal
 }

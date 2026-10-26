@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Swordfish's icon, for Shoal's list. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FFFFE1DF" android:pathData="M0,0 H108 V108 H0 Z"/>
+    <path android:fillColor="#FFDD4649" android:pathData="M36,33 H72 A13,13 0 0 1 85,46 V62 A13,13 0 0 1 72,75 H36 A13,13 0 0 1 23,62 V46 A13,13 0 0 1 36,33 Z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M44,43 C51,45.5 60,50 66.5,54 C60,58 51,62.5 44,65 C46.5,58 46.5,50 44,43 Z"/>
+    <path android:fillColor="#FFDD4649" android:pathData="M58.35,52.60 a1.15,1.15 0 1,0 2.3,0 a1.15,1.15 0 1,0 -2.3,0 Z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M65,53.2 L80,54 L65,54.8 Z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M45.5,54 L37,46.5 C38.6,49.6 39.2,51.8 39.2,54 C39.2,56.2 38.6,58.4 37,61.5 Z"/>
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd" android:pathData="M48.2,45.6 C49.6,41.6 53.4,39 57.4,38.6 C56.4,41.4 56.2,44.4 56.9,47.8 Z"/>
+</vector>
