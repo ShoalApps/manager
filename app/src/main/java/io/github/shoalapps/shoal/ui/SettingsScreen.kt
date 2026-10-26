@@ -84,6 +84,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
             group("About") {
+                row { sh -> Link("Support Shoal", "Shoal is free and has no ads; donations on Liberapay keep it going", sh) { open("https://liberapay.com/ShoalApps") } }
                 row { sh -> Link("Shoal $version", "github.com/ShoalApps/shoal", sh) { open("https://github.com/ShoalApps/shoal") } }
                 row { sh -> Link("Shoal", "shoalapps.github.io: all the apps and their credits", sh) { open("https://shoalapps.github.io") } }
                 row { sh -> Link("GNU GPL v3 or later", "Free software. Installs only apps signed by Shoal.", sh) { open("https://www.gnu.org/licenses/gpl-3.0.html") } }

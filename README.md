@@ -28,3 +28,7 @@ Shizuku's API is used under the Apache License 2.0.
 ## Licence
 
 Free software under the **GNU General Public License v3.0 or later**.
+
+## Support
+
+Shoal is free, open source and has no ads. If you'd like to help it keep going, you can [support Shoal on Liberapay](https://liberapay.com/ShoalApps).
