@@ -126,9 +126,11 @@ fun AccountsScreen(onBack: () -> Unit) {
             items(listOf(Accounts.Service.TIKTOK, Accounts.Service.INSTAGRAM, Accounts.Service.X)) { s ->
                 ServiceCard(
                     s.title,
-                    if (Accounts.signedIn(s)) "Signed in" else when (s) { Accounts.Service.X -> "Blobfish's X tab"; else -> "Clownfish's ${s.title} tab" },
+                    if (Accounts.signedIn(s)) "Signed in" else when (s) { Accounts.Service.X -> "Blobfish: signs in on X's own page"; else -> "Clownfish: signs in on ${s.title}'s own page" },
                     Accounts.signedIn(s),
-                    onSignIn = { signingIn = s },
+                    // Sign in where the account is used: Blobfish's X tab, Clownfish's TikTok and
+                    // Instagram tabs. Without the app, the service's own page here.
+                    onSignIn = { if (!openInApp(context, s)) signingIn = s },
                     onSignOut = { Accounts.signOut(s) },
                 )
             }
@@ -167,6 +169,20 @@ fun AccountsScreen(onBack: () -> Unit) {
     }
 }
 
+/** Opens the Shoal app that uses this account at its sign-in, if it's installed. */
+private fun openInApp(context: android.content.Context, s: Accounts.Service): Boolean {
+    val (app, activity, link) = when (s) {
+        Accounts.Service.X -> Triple("io.github.shoalapps.blobfish", null, "blobfish://x")
+        Accounts.Service.TIKTOK -> Triple("io.github.shoalapps.clownfish", "io.github.shoalapps.clownfish.ClipsActivity", "clownfish://tab/tiktok")
+        Accounts.Service.INSTAGRAM -> Triple("io.github.shoalapps.clownfish", "io.github.shoalapps.clownfish.ClipsActivity", "clownfish://tab/reels")
+        else -> return false
+    }
+    val pkg = listOf(app, "$app.debug").firstOrNull { runCatching { context.packageManager.getPackageInfo(it, 0) }.isSuccess } ?: return false
+    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(link)).addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+    if (activity != null) intent.setClassName(pkg, activity) else intent.setPackage(pkg)
+    return runCatching { context.startActivity(intent) }.isSuccess
+}
+
 @Composable
 private fun ServiceCard(title: String, body: String, signedIn: Boolean, onSignIn: () -> Unit, onSignOut: () -> Unit, extra: (@Composable () -> Unit)? = null) {
     Surface(shape = RoundedCornerShape(24.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh, modifier = Modifier.fillMaxWidth()) {
@@ -195,12 +211,18 @@ private fun WebSignIn(s: Accounts.Service, onDone: (Boolean) -> Unit) {
             AndroidView(
                 factory = { ctx ->
                     CookieManager.getInstance().setAcceptCookie(true)
+                    // Debug builds can be inspected from a computer (chrome://inspect); release builds can't.
+                    if (ctx.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE != 0) WebView.setWebContentsDebuggingEnabled(true)
                     WebView(ctx).apply {
                         settings.javaScriptEnabled = true
                         settings.domStorageEnabled = true
                         // Sign-in pages work best in their mobile Chrome form.
                         settings.userAgentString = settings.userAgentString.replace("; wv)", ")").replace(Regex(" Version/\\d+\\.\\d+"), "")
                         CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
+                        settings.mediaPlaybackRequiresUserGesture = false
+                        // Without a chrome client, pages that open pop-ups or ask for permissions
+                        // (Google and Apple sign-in buttons, consent dialogs) can stall half drawn.
+                        webChromeClient = android.webkit.WebChromeClient()
                         var finished = false
                         webViewClient = object : WebViewClient() {
                             override fun onPageStarted(view: WebView, url: String?, favicon: android.graphics.Bitmap?) { loading = true }

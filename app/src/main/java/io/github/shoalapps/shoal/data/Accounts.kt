@@ -33,8 +33,8 @@ object Accounts {
     enum class Service(val key: String, val title: String, val loginUrl: String, val cookieSite: String, val signedInCookie: String) {
         YOUTUBE("youtube", "YouTube", "https://accounts.google.com/ServiceLogin?service=youtube&continue=https%3A%2F%2Fwww.youtube.com%2F", "https://www.youtube.com", "SAPISID"),
         TIKTOK("tiktok", "TikTok", "https://www.tiktok.com/login", "https://www.tiktok.com", "sessionid"),
-        INSTAGRAM("instagram", "Instagram", "https://www.instagram.com/accounts/login/", "https://www.instagram.com", "sessionid"),
-        X("x", "X", "https://x.com/i/flow/login", "https://x.com", "auth_token");
+        INSTAGRAM("instagram", "Instagram", "https://www.instagram.com/", "https://www.instagram.com", "sessionid"),
+        X("x", "X", "https://x.com/home", "https://x.com", "auth_token");
 
         companion object { fun of(key: String) = entries.firstOrNull { it.key == key } }
     }
