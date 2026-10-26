@@ -134,7 +134,7 @@ object Accounts {
         channelsIn(root)
     }
 
-    /** Accounts in an accounts_list answer; the same reading Anglerfish uses. */
+    /** Accounts in an accounts_list answer; the same reading Swordfish uses. */
     fun channelsIn(root: JsonElement): List<Channel> {
         val out = mutableListOf<Channel>()
         fun walk(el: JsonElement?) {

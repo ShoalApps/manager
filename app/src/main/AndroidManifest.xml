@@ -12,10 +12,11 @@
 
     <!-- Only the Shoal apps (and Shizuku) need to be visible to the Manager. -->
     <queries>
+        <package android:name="io.github.shoalapps.swordfish" />
         <package android:name="io.github.shoalapps.anglerfish" />
         <package android:name="io.github.shoalapps.blobfish" />
         <package android:name="io.github.shoalapps.clownfish" />
-        <package android:name="io.github.shoalapps.swordfish" />
+        <package android:name="io.github.shoalapps.pufferfish" />
         <package android:name="moe.shizuku.privileged.api" />
         <package android:name="com.hamondev.shevery" />
     </queries>

@@ -91,7 +91,7 @@ fun AccountsScreen(onBack: () -> Unit) {
         ) {
             item {
                 Text(
-                    "Sign in here once and Anglerfish, Social and Clips use these accounts. They stay on this phone and are only shared with apps signed by Shoal.",
+                    "Sign in here once and Swordfish, Social and Clips use these accounts. They stay on this phone and are only shared with apps signed by Shoal.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

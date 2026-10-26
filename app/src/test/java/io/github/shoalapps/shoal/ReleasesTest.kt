@@ -8,7 +8,7 @@ import org.junit.Test
 
 class ReleasesTest {
     @Test fun buildNumbersComeFromReleaseTags() {
-        assertEquals(42, Releases.buildOf("https://github.com/ShoalApps/anglerfish/releases/tag/build-42"))
+        assertEquals(42, Releases.buildOf("https://github.com/ShoalApps/swordfish/releases/tag/build-42"))
         assertEquals(7, Releases.buildOf("build-7"))
         assertNull(Releases.buildOf("v1.0"))
     }

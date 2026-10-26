@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Shoal's colours; Android 12+ swaps these for wallpaper colours (values-v31). -->
+    <!-- The icon's colours: its service's brand colours, softened the Material You way. -->
     <color name="icon_bg">#FF9FF2E2</color>
     <color name="icon_shape">#FF006B5E</color>
     <color name="icon_glyph">#FFFFFFFF</color>
