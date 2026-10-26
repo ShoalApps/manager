@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit
 class ManagerApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        Telemetry.init(this)
         DataMover.run(this)
         Graph.app = this
         io.github.shoalapps.shoal.data.Accounts.init(this)
@@ -101,6 +102,7 @@ object Graph {
         }
         store.lastCheck = System.currentTimeMillis()
         checking = false
+        io.github.shoalapps.shoal.widget.recordUpdates(app, Catalog.apps.count { state(it).updateAvailable })
     }
 
     /** Downloads, checks and installs an app's latest release. */

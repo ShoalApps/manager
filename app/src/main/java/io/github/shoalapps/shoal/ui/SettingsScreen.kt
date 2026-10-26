@@ -84,6 +84,9 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
             group("About") {
+                if (io.github.shoalapps.shoal.Telemetry.available) row { sh -> Toggle("Send error reports", "Anonymous crash and error reports help fix bugs. Never your accounts or history.", io.github.shoalapps.shoal.Telemetry.enabled, sh) { v -> io.github.shoalapps.shoal.Telemetry.setEnabled(context, v) } }
+                row { sh -> Link("Privacy policy", "What Shoal sends, and to whom", sh) { open("https://shoalapps.github.io/privacy.html") } }
+                row { sh -> Link("Legal", "Licences, trademarks and notices", sh) { open("https://shoalapps.github.io/legal.html") } }
                 row { sh -> Link("Support Shoal", "Shoal is free and has no ads; donations on Liberapay keep it going", sh) { open("https://liberapay.com/ShoalApps") } }
                 row { sh -> Link("Shoal $version", "github.com/ShoalApps/shoal", sh) { open("https://github.com/ShoalApps/shoal") } }
                 row { sh -> Link("Shoal", "shoalapps.github.io: all the apps and their credits", sh) { open("https://shoalapps.github.io") } }
