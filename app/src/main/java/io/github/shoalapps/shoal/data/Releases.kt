@@ -41,25 +41,33 @@ object Releases {
     /** Downloads a release's APK into the cache, reporting progress from 0 to 1. */
     suspend fun download(http: OkHttpClient, release: Release, dir: File, onProgress: (Float) -> Unit): File = withContext(Dispatchers.IO) {
         val out = File(dir, "${release.app.packageName}-${release.build}.apk")
-        http.newCall(Request.Builder().url(release.apkUrl).build()).execute().use { resp ->
-            check(resp.isSuccessful) { "Download failed (${resp.code})" }
-            val body = resp.body ?: error("Empty download")
-            val total = body.contentLength().takeIf { it > 0 }
-            out.outputStream().use { sink ->
-                body.byteStream().use { src ->
-                    val buf = ByteArray(64 * 1024)
-                    var done = 0L
-                    while (true) {
-                        val n = src.read(buf)
-                        if (n < 0) break
-                        sink.write(buf, 0, n)
-                        done += n
-                        if (total != null) onProgress(done.toFloat() / total)
+        val partial = File.createTempFile("${release.app.packageName}-${release.build}-", ".part", dir)
+        try {
+            http.newCall(Request.Builder().url(release.apkUrl).build()).execute().use { resp ->
+                check(resp.isSuccessful) { "Download failed (${resp.code})" }
+                val body = resp.body ?: error("Empty download")
+                val total = body.contentLength().takeIf { it > 0 }
+                partial.outputStream().use { sink ->
+                    body.byteStream().use { src ->
+                        val buf = ByteArray(64 * 1024)
+                        var done = 0L
+                        while (true) {
+                            val n = src.read(buf)
+                            if (n < 0) break
+                            sink.write(buf, 0, n)
+                            done += n
+                            if (total != null) onProgress(done.toFloat() / total)
+                        }
                     }
                 }
             }
+            check(partial.renameTo(out)) { "Couldn't save the download" }
+            out
+        } catch (e: Exception) {
+            // Failed downloads cannot leave a partial APK or damage an existing one.
+            partial.delete()
+            throw e
         }
-        out
     }
 
     /**
