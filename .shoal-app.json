@@ -1,0 +1,6 @@
+{
+  "name": "Shoal",
+  "description": "Install, update and manage the Shoal Android apps.",
+  "icon": "app/src/main/res/drawable/ic_launcher_foreground.xml",
+  "colours": "app/src/main/res/values/icon_colors.xml"
+}
