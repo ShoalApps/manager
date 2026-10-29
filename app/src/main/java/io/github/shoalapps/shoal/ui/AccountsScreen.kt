@@ -30,7 +30,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
+import io.github.shoalapps.shoal.LocalisedIcon as Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -38,7 +38,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import io.github.shoalapps.shoal.LocalisedText as Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -264,7 +264,7 @@ private fun ChannelPicker(onDone: () -> Unit) {
                         Row(Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
                             coil3.compose.AsyncImage(c.avatar, null, Modifier.size(44.dp).clip(CircleShape))
                             Column(Modifier.padding(start = 12.dp).weight(1f)) {
-                                Text(c.name, style = MaterialTheme.typography.titleMedium)
+                                Text(c.name, localise = false, style = MaterialTheme.typography.titleMedium)
                                 c.handle?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                             }
                             if (c.selected) Icon(Icons.Rounded.CheckCircle, "Current", tint = MaterialTheme.colorScheme.primary)

@@ -24,14 +24,16 @@ import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 
 class ManagerApp : Application() {
+    override fun attachBaseContext(base: android.content.Context) { super.attachBaseContext(AppLanguage.wrap(base)) }
     override fun onCreate() {
         super.onCreate()
+        AppLanguage.init(this)
         Telemetry.init(this)
         DataMover.run(this)
         Graph.app = this
         io.github.shoalapps.shoal.data.Accounts.init(this)
         getSystemService(NotificationManager::class.java).createNotificationChannel(
-            NotificationChannel(UpdateWorker.CHANNEL, "Updates", NotificationManager.IMPORTANCE_DEFAULT).apply {
+            NotificationChannel(UpdateWorker.CHANNEL, io.github.shoalapps.shoal.AppLanguage.translate("Updates"), NotificationManager.IMPORTANCE_DEFAULT).apply {
                 description = "New versions of Shoal apps"
             },
         )
