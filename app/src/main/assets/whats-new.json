@@ -1,5 +1,9 @@
 [
   {
+    "title": "Your apps, even offline",
+    "body": "Shoal remembers the last checked releases when offline or Data Saver pauses checks. Already downloaded APKs can be installed offline after the usual signature checks. New downloads respect Wi-Fi-only settings and Data Saver throughout the transfer."
+  },
+  {
     "title": "Know what changed",
     "body": "Shoal now shows release notes once after each app update. Open them again in Settings whenever you like."
   },

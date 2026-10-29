@@ -28,6 +28,7 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
     override suspend fun doWork(): Result {
         val s = Graph.store.settings.value
         if (!s.autoUpdate) return Result.success()
+        if (!NetworkPolicy.allowed()) return Result.retry()
         Graph.check()
         val pending = Catalog.apps.filter { Graph.states[it.packageName]?.updateAvailable == true }
         if (pending.isEmpty()) return Result.success()

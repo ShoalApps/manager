@@ -49,7 +49,7 @@ class DownloadTest {
     @Test fun failedTransferPreservesPreviousFileAndRemovesPartial() = runBlocking {
         val existing = dir.root.resolve("${Catalog.video.packageName}-5.apk").apply { writeText("existing apk") }
         try {
-            Releases.download(client(true), release, dir.root) { }
+            Releases.download(client(true), release, dir.root, allowDownload = { true }, verified = { false }) { }
             fail("Expected a failed transfer")
         } catch (_: IOException) { }
         assertEquals("existing apk", existing.readText())
@@ -58,9 +58,27 @@ class DownloadTest {
 
     @Test fun completeTransferReplacesPreviousFile() = runBlocking {
         val existing = dir.root.resolve("${Catalog.video.packageName}-5.apk").apply { writeText("existing apk") }
-        val result = Releases.download(client(false), release, dir.root) { }
+        val result = Releases.download(client(false), release, dir.root, allowDownload = { true }, verified = { false }) { }
         assertEquals(existing, result)
         assertEquals("new apk", result.readText())
         assertEquals(listOf(existing.name), dir.root.list()!!.toList())
     }
+    @Test fun verifiedCachedInstallerWorksWithNetworkDisallowed() = runBlocking {
+        val existing = dir.root.resolve(Catalog.video.packageName + "-5.apk").apply { writeText("verified apk") }
+        val noNetwork = OkHttpClient.Builder().addInterceptor { error("Offline installation accessed the network") }.build()
+        assertEquals(existing, Releases.download(noNetwork, release, dir.root, allowDownload = { false }, verified = { true }) {})
+        assertEquals("verified apk", existing.readText())
+    }
+
+    @Test fun aNetworkRestrictionStopsTheTransferAndKeepsThePreviousFile() = runBlocking {
+        val existing = dir.root.resolve(Catalog.video.packageName + "-5.apk").apply { writeText("old apk") }
+        var checks = 0
+        try {
+            Releases.download(client(false), release, dir.root, allowDownload = { ++checks <= 2 }, verified = { false }) {}
+            fail("Expected the transfer to pause")
+        } catch (_: IllegalStateException) { }
+        assertEquals("old apk", existing.readText())
+        assertEquals(listOf(existing.name), dir.root.list()!!.toList())
+    }
+
 }
