@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Know what changed",
+    "body": "Shoal now shows release notes once after each app update. Open them again in Settings whenever you like."
+  },
+  {
+    "title": "Works offline",
+    "body": "The notes are included with your installed version, with no extra network requests."
+  }
+]

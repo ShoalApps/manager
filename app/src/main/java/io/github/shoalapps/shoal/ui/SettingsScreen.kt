@@ -85,6 +85,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
             group("About") {
+                row { sh -> Link("What's new", "Changes in this version", sh) { io.github.shoalapps.shoal.WhatsNew.open() } }
                 if (io.github.shoalapps.shoal.Telemetry.available) row { sh -> Toggle("Send error reports", "Anonymous crash and error reports help fix bugs. Never your accounts or history.", io.github.shoalapps.shoal.Telemetry.enabled, sh) { v -> io.github.shoalapps.shoal.Telemetry.setEnabled(context, v) } }
                 row { sh -> Link("Privacy policy", "What Shoal sends, and to whom", sh) { open("https://shoalapps.github.io/privacy.html") } }
                 row { sh -> Link("Legal", "Licences, trademarks and notices", sh) { open("https://shoalapps.github.io/legal.html") } }

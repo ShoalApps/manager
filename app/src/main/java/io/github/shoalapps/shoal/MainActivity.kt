@@ -34,6 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settings by Graph.store.settings.collectAsState()
             ManagerTheme(settings) {
+                WhatsNew.Host()
                 var screen by screen
                 BackHandler(enabled = screen != "home") { screen = "home" }
                 when (screen) {
