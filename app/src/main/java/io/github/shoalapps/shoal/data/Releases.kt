@@ -50,10 +50,13 @@ object Releases {
     }.getOrNull()
 
     /** Downloads a release's APK into the cache, reporting progress from 0 to 1. */
-    suspend fun download(http: OkHttpClient, release: Release, dir: File, onProgress: (Float) -> Unit): File = withContext(Dispatchers.IO) {
+    suspend fun download(http: OkHttpClient, release: Release, dir: File,
+        allowDownload: () -> Boolean = NetworkPolicy::downloadsAllowed,
+        verified: (File) -> Boolean = { verify(io.github.shoalapps.shoal.Graph.app, it, release.app) == null },
+        onProgress: (Float) -> Unit): File = withContext(Dispatchers.IO) {
         val out = File(dir, "${release.app.packageName}-${release.build}.apk")
-        if (out.isFile && verify(io.github.shoalapps.shoal.Graph.app, out, release.app) == null) return@withContext out
-        check(NetworkPolicy.downloadsAllowed()) { "Download paused. Connect to an allowed network; Data Saver takes precedence." }
+        if (out.isFile && verified(out)) return@withContext out
+        check(allowDownload()) { "Download paused. Connect to an allowed network; Data Saver takes precedence." }
         val partial = File.createTempFile("${release.app.packageName}-${release.build}-", ".part", dir)
         try {
             http.newCall(Request.Builder().url(release.apkUrl).build()).execute().use { resp ->
@@ -65,7 +68,7 @@ object Releases {
                         val buf = ByteArray(64 * 1024)
                         var done = 0L
                         while (true) {
-                            check(NetworkPolicy.downloadsAllowed()) { "Download paused by network settings" }
+                            check(allowDownload()) { "Download paused by network settings" }
                             val n = src.read(buf)
                             if (n < 0) break
                             sink.write(buf, 0, n)
