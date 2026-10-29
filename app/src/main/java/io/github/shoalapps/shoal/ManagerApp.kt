@@ -13,6 +13,7 @@ import io.github.shoalapps.shoal.data.Releases
 import io.github.shoalapps.shoal.data.Store
 import io.github.shoalapps.shoal.data.ShoalApp
 import io.github.shoalapps.shoal.data.UpdateWorker
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -89,30 +90,39 @@ object Graph {
     }
 
     /** Asks GitHub for every app's latest release. */
-    suspend fun check() {
+    private val checkMutex = kotlinx.coroutines.sync.Mutex()
+
+    suspend fun check() = checkMutex.withLock {
         checking = true
-        refreshInstalled()
-        if (!io.github.shoalapps.shoal.data.NetworkPolicy.allowed()) {
-            Catalog.apps.forEach { a -> set(a) { it.copy(message = "Offline or Data Saver: showing the last checked release") } }
+        try {
+            refreshInstalled()
+            if (!io.github.shoalapps.shoal.data.NetworkPolicy.allowed()) {
+                Catalog.apps.forEach { a -> set(a) {
+                    it.copy(message = if (it.latest == null) "Offline or Data Saver: no saved release information" else "Offline or Data Saver: showing the last checked release")
+                } }
+                return@withLock
+            }
+            val results = coroutineScope {
+                Catalog.apps.map { a ->
+                    async(Dispatchers.IO) {
+                        val latest = try { Result.success(Releases.latest(http, a)) }
+                            catch (e: kotlinx.coroutines.CancellationException) { throw e }
+                            catch (e: Exception) { Result.failure(e) }
+                        a to latest
+                    }
+                }.awaitAll()
+            }
+            results.forEach { (a, r) ->
+                set(a) { state -> r.fold(
+                    { release -> if (release == null) state.copy(message = if (state.latest == null) "Couldn't find a release" else "Couldn't find a release; showing the last checked version") else state.copy(latest = release, message = null) },
+                    { state.copy(message = if (state.latest == null) "Couldn't reach GitHub" else "Couldn't reach GitHub; showing the last checked version") },
+                ) }
+            }
+            if (results.any { it.second.getOrNull() != null }) store.lastCheck = System.currentTimeMillis()
+            io.github.shoalapps.shoal.widget.recordUpdates(app, Catalog.apps.count { state(it).updateAvailable })
+        } finally {
             checking = false
-            return
         }
-        coroutineScope {
-            Catalog.apps.map { a ->
-                async(Dispatchers.IO) {
-                    val latest = runCatching { Releases.latest(http, a) }
-                    a to latest
-                }
-            }.awaitAll()
-        }.forEach { (a, r) ->
-            set(a) { s -> r.fold(
-                { release -> if (release == null) s.copy(message = if (s.latest == null) "Couldn't find a release" else "Couldn't find a release; showing the last checked version") else s.copy(latest = release, message = null) },
-                { s.copy(message = if (s.latest == null) "Couldn't reach GitHub" else "Couldn't reach GitHub; showing the last checked version") },
-            ) }
-        }
-        store.lastCheck = System.currentTimeMillis()
-        checking = false
-        io.github.shoalapps.shoal.widget.recordUpdates(app, Catalog.apps.count { state(it).updateAvailable })
     }
 
     /** Downloads, checks and installs an app's latest release. */
