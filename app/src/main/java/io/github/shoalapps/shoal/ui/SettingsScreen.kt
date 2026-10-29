@@ -20,7 +20,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
+import io.github.shoalapps.shoal.LocalisedIcon as Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.ListItemShapes
@@ -32,7 +32,7 @@ import androidx.compose.material3.SegmentedListItem
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
+import io.github.shoalapps.shoal.LocalisedText as Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -78,6 +78,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                     }
                 }
             }
+            item(key = "app-language") { io.github.shoalapps.shoal.AppLanguage.SettingsRow() }
             group("Appearance") {
                 row { sh -> Choices("Theme", null, listOf("Auto", "Light", "Dark"), s.theme, sh) { i -> store.updateSettings { it.copy(theme = i) } } }
                 if (Build.VERSION.SDK_INT >= 31) {
@@ -85,6 +86,7 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
             group("About") {
+                row { sh -> Link("What's new", "Changes in this version", sh) { io.github.shoalapps.shoal.WhatsNew.open() } }
                 if (io.github.shoalapps.shoal.Telemetry.available) row { sh -> Toggle("Send error reports", "Anonymous crash and error reports help fix bugs. Never your accounts or history.", io.github.shoalapps.shoal.Telemetry.enabled, sh) { v -> io.github.shoalapps.shoal.Telemetry.setEnabled(context, v) } }
                 row { sh -> Link("Privacy policy", "What Shoal sends, and to whom", sh) { open("https://shoalapps.github.io/privacy.html") } }
                 row { sh -> Link("Legal", "Licences, trademarks and notices", sh) { open("https://shoalapps.github.io/legal.html") } }

@@ -18,6 +18,7 @@ import io.github.shoalapps.shoal.ui.ManagerTheme
 import io.github.shoalapps.shoal.ui.SettingsScreen
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(base: android.content.Context) { super.attachBaseContext(io.github.shoalapps.shoal.AppLanguage.wrap(base)) }
     /** The app whose "Check for updates" opened the Manager, if any. */
     private val highlight = mutableStateOf<String?>(null)
     /** A screen the widget asked for (shoal://accounts). */
@@ -34,6 +35,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settings by Graph.store.settings.collectAsState()
             ManagerTheme(settings) {
+                WhatsNew.Host()
                 var screen by screen
                 BackHandler(enabled = screen != "home") { screen = "home" }
                 when (screen) {

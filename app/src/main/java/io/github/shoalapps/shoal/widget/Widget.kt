@@ -91,7 +91,7 @@ internal fun WidgetButton(icon: Int, label: String, action: Action, modifier: Gl
         ) {
             Image(ImageProvider(icon), label, GlanceModifier.size(24.dp), colorFilter = ColorFilter.tint(GlanceTheme.colors.onSecondaryContainer))
         }
-        Text(label, style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant, fontSize = 12.sp), maxLines = 1, modifier = GlanceModifier.padding(top = 4.dp))
+        Text(io.github.shoalapps.shoal.AppLanguage.translate(label), style = TextStyle(color = GlanceTheme.colors.onSurfaceVariant, fontSize = 12.sp), maxLines = 1, modifier = GlanceModifier.padding(top = 4.dp))
     }
 }
 
