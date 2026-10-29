@@ -105,7 +105,10 @@ object Graph {
                 }
             }.awaitAll()
         }.forEach { (a, r) ->
-            set(a) { s -> r.fold({ s.copy(latest = it ?: s.latest, message = null) }, { s.copy(message = "Couldn't reach GitHub") }) }
+            set(a) { s -> r.fold(
+                { release -> if (release == null) s.copy(message = if (s.latest == null) "Couldn't find a release" else "Couldn't find a release; showing the last checked version") else s.copy(latest = release, message = null) },
+                { s.copy(message = if (s.latest == null) "Couldn't reach GitHub" else "Couldn't reach GitHub; showing the last checked version") },
+            ) }
         }
         store.lastCheck = System.currentTimeMillis()
         checking = false
