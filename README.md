@@ -1,4 +1,4 @@
-# Shoal
+<p align="center"><a href="https://shoalapps.github.io/"><img src="https://raw.githubusercontent.com/ShoalApps/shoalapps.github.io/main/assets/readme/shoal.svg" alt="Shoal - a Shoal app, with the rest of the Shoal family" width="100%"></a></p>
 
 Installs and updates the [Shoal](https://shoalapps.github.io) apps (Video, Social and Clips) from
 their GitHub releases, and keeps itself up to date too.
