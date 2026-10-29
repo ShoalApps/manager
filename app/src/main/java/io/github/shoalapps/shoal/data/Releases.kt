@@ -15,6 +15,16 @@ import java.security.MessageDigest
 object Releases {
     data class Release(val app: ShoalApp, val build: Int, val apkUrl: String, val pageUrl: String)
 
+    private val saved get() = io.github.shoalapps.shoal.Graph.app.getSharedPreferences("offline-releases", Context.MODE_PRIVATE)
+    fun cached(app: ShoalApp): Release? = runCatching {
+        val o = org.json.JSONObject(saved.getString(app.packageName, null) ?: return null)
+        Release(app, o.getInt("build"), o.getString("apk"), o.getString("page"))
+    }.getOrNull()
+    private fun remember(release: Release) {
+        saved.edit().putString(release.app.packageName, org.json.JSONObject().put("build", release.build)
+            .put("apk", release.apkUrl).put("page", release.pageUrl).toString()).apply()
+    }
+
     /** The build number in a release tag like "build-23", or null for anything else. */
     fun buildOf(tagOrUrl: String): Int? = Regex("""build-(\d+)""").find(tagOrUrl)?.groupValues?.get(1)?.toIntOrNull()
 
@@ -23,13 +33,14 @@ object Releases {
      * to the API's rate limits.
      */
     suspend fun latest(http: OkHttpClient, app: ShoalApp): Release? = withContext(Dispatchers.IO) {
+        if (!NetworkPolicy.allowed()) return@withContext cached(app)
         val client = http.newBuilder().followRedirects(false).followSslRedirects(false).build()
         val req = Request.Builder().url("https://github.com/${app.repo}/releases/latest").head().build()
         client.newCall(req).execute().use { resp ->
             val page = resp.header("Location") ?: return@withContext null
             val tag = page.substringAfterLast("/tag/", "").ifEmpty { return@withContext null }
             val build = buildOf(tag) ?: return@withContext null
-            Release(app, build, "https://github.com/${app.repo}/releases/download/$tag/${app.asset}", page)
+            Release(app, build, "https://github.com/${app.repo}/releases/download/$tag/${app.asset}", page).also(::remember)
         }
     }
 
@@ -41,6 +52,8 @@ object Releases {
     /** Downloads a release's APK into the cache, reporting progress from 0 to 1. */
     suspend fun download(http: OkHttpClient, release: Release, dir: File, onProgress: (Float) -> Unit): File = withContext(Dispatchers.IO) {
         val out = File(dir, "${release.app.packageName}-${release.build}.apk")
+        if (out.isFile && verify(io.github.shoalapps.shoal.Graph.app, out, release.app) == null) return@withContext out
+        check(NetworkPolicy.downloadsAllowed()) { "Download paused. Connect to an allowed network; Data Saver takes precedence." }
         val partial = File.createTempFile("${release.app.packageName}-${release.build}-", ".part", dir)
         try {
             http.newCall(Request.Builder().url(release.apkUrl).build()).execute().use { resp ->
@@ -52,6 +65,7 @@ object Releases {
                         val buf = ByteArray(64 * 1024)
                         var done = 0L
                         while (true) {
+                            check(NetworkPolicy.downloadsAllowed()) { "Download paused by network settings" }
                             val n = src.read(buf)
                             if (n < 0) break
                             sink.write(buf, 0, n)

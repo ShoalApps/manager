@@ -85,13 +85,18 @@ object Graph {
 
     /** Re-reads what's installed (cheap; after installs and on resume). */
     fun refreshInstalled() {
-        for (a in Catalog.apps) set(a) { it.copy(installed = Releases.installedBuild(this.app, a)) }
+        for (a in Catalog.apps) set(a) { it.copy(installed = Releases.installedBuild(this.app, a), latest = it.latest ?: Releases.cached(a)) }
     }
 
     /** Asks GitHub for every app's latest release. */
     suspend fun check() {
         checking = true
         refreshInstalled()
+        if (!io.github.shoalapps.shoal.data.NetworkPolicy.allowed()) {
+            Catalog.apps.forEach { a -> set(a) { it.copy(message = "Offline or Data Saver: showing the last checked release") } }
+            checking = false
+            return
+        }
         coroutineScope {
             Catalog.apps.map { a ->
                 async(Dispatchers.IO) {
